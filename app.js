@@ -276,6 +276,7 @@ app.get("/my-date/:startdate/:enddate", (req, res) => {
 
 app.post("/api/geofence", (req, res) => {
     const asset_id = req.body.assetId;
+    console.log(asset_id);
     const coordinates = req.body.name;
     let arr1 = [];
     const obj1 = {
