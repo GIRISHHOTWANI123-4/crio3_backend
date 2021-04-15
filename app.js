@@ -4,10 +4,11 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const pointInPolygon = require("point-in-polygon");
-
+const uri=require("./dev");
 const PORT=8081||process.env.PORT;
 
-mongoose.connect("mongodb+srv://girish:girish@cluster0.s7cjk.mongodb.net/Xmeme?retryWrites=true&w=majority",
+const url=uri.mongourl||process.env.MONGOURL;
+mongoose.connect(url,
     {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log("Mongo DB connected"));
 
 const mongooseSchema = new mongoose.Schema({
