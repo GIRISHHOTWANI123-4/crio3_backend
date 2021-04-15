@@ -7,7 +7,15 @@ const pointInPolygon = require("point-in-polygon");
 const uri=require("./dev");
 const PORT=8081||process.env.PORT;
 
-const url=uri.mongourl||process.env.MONGOURL;
+let url;
+if(process.env.NODE_ENV==="production")
+{
+    url=process.env.MONGOURL;
+}
+else
+{
+    url=uri.mongourl
+}
 mongoose.connect(url,
     {useNewUrlParser: true, useUnifiedTopology: true}).then(() => console.log("Mongo DB connected"));
 
