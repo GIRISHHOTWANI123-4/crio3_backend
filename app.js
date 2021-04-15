@@ -145,41 +145,95 @@ app.get('/api/asset_id', async (req, res) => {
 
 })
 
-app.get("/api/asset_type/:assettype", (req, res) => {
+app.get("/api/asset_type/:assettype", async (req, res) => {
     const arr = [];
-    console.log(req.params.assettype);
-    const obj2 = {
-        asset_id: 52,
-        asset_unique_number: "GJ 2 AP",
-        asset_info: "The truck is carrying the sports items",
-        time_stamp: "2017-07-01T12:30:00Z",
-        latitude: 19.0948,
-        longitude: 74.7480,
-        asset_type_id_foreign_key: 2
+    const assetType=(req.params.assettype);
+    if(assetType==='truck') {
+        const obj1 = {
+            asset_id: 1,
+            asset_info: "The truck belongs to Rahul",
+            asset_unique_number: "1",
+            time_stamp: "2017-03-01T12:48:00Z",
+            latitude: 16.8524,
+            longitude: 74.5815,
+            asset_type_id_foreign_key: 2
+        }
+
+        const obj2={
+            asset_id: 2,
+            asset_info: "The vehicle carries sport materials",
+            asset_unique_number: "2",
+            time_stamp: "2021-03-01T12:48:00Z",
+            latitude: 18.5204,
+            longitude: 73.8567,
+            asset_type_id_foreign_key: 3
+        }
+        const obj3={
+            asset_id: 5,
+            asset_info: "The truck is carrying the material from capital of India",
+            asset_unique_number: "5",
+            time_stamp: "2021-08-22T12:48:00Z",
+            latitude:28.7041,
+            longitude:77.1025,
+            asset_type_id_foreign_key:6
+        }
+
+        arr.push(obj1);
+        arr.push(obj2);
+        arr.push(obj3);
+
+        res.send(arr);
     }
-    arr.push(obj2);
-    res.send(arr);
+    else if(assetType==='driver')
+    {
+      const obj1={
+          asset_id: 3,
+          asset_info: "The salesman has contract with Mohan Fabrics",
+          asset_unique_number: "3",
+          time_stamp: "2021-05-02T12:48:00Z",
+          latitude:19.9975,
+          longitude:73.7898,
+          asset_type_id_foreign_key:4
+      }
+      const obj2={
+          asset_id: 4,
+          asset_info: "The delivery person delivers all items in Maharashtra district ",
+          asset_unique_number: "4",
+          time_stamp: "2021-08-22T12:48:00Z",
+          latitude:19.0948,
+          longitude:74.748,
+          asset_type_id_foreign_key:5
+      }
+        const obj4={
+            asset_id: 6,
+            asset_info: "This salesperson is awarded with the best employee from Mohan Fabrics...",
+            asset_unique_number: "6",
+            time_stamp: "2021-09-25T12:48:00Z",
+            latitude:18.1853,
+            longitude:76.042,
+            asset_type_id_foreign_key:7
+        }
+      arr.push(obj1);
+      arr.push(obj2);
+      arr.push(obj4);
+      res.send(arr);
+    }
+    else {
+        const response=await assets.find();
+        res.send(response);
+    }
+
 
 })
 
-app.get("/api/asset_id/:id", (req, res) => {
-    console.log(req.params.id);
+app.get("/api/asset_id/:id", async (req, res) => {
+    const asset_id=(req.params.id);
     const arr = [];
-    const obj1 = {
-        asset_id: 25,
-        asset_unique_number: "MH 14 GJ",
-        asset_info: "None",
-        time_stamp: "2017-02-01T12:30:00Z",
-        latitude: 18.5204,
-        longitude: 73.8567,
-        asset_type_id_foreign_key: 1
-    }
-    arr.push(obj1);
-    res.send(arr);
+    const response=await assets.find({asset_id:asset_id});
+    res.send(response);
 });
 
 app.get("/api/history/:id", (req, res) => {
-    console.log(req.params.id);
     const arr = [];
     const obj1 = {
         asset_id: 1,
@@ -205,40 +259,16 @@ app.get("/api/history/:id", (req, res) => {
     res.send(arr);
 })
 
-app.get("/api/asset_id_max_asset/:id", (req, res) => {
-    console.log("MAX id: ", req.params.id);
+app.get("/api/asset_id_max_asset/:id", async (req, res) => {
     const arr = [];
-    const obj1 = {
-        asset_id: 1,
-        asset_unique_number: "MH 14 GJ",
-        asset_info: "truck",
-        time_stamp: "2017-02-01T12:30:00Z",
-        longitude: 73.7898,
-        latitude: 19.9975,
-        asset_type_id_foreign_key: 1
+    const count=(req.params.id);
+    let response=await assets.find();
+    response=response.reverse();
+    for(let i=0;i<count && i<response.length;i++)
+    {
+        let assetDetail=response[i];
+        arr.push(assetDetail);
     }
-    const obj2 = {
-        asset_id: 2,
-        asset_unique_number: "MH 14 GJ",
-        asset_info: "truck",
-        time_stamp: "2017-02-01T12:30:00Z",
-        longitude: 78.0,
-        latitude: 20.0,
-        asset_type_id_foreign_key: 1
-    }
-
-    const obj3 = {
-        asset_id: 3,
-        asset_unique_number: "MH 14 GJ",
-        asset_info: "truck",
-        time_stamp: "2017-02-01T12:30:00Z",
-        longitude: 74.7480,
-        latitude: 19.0948,
-        asset_type_id_foreign_key: 1
-    }
-    arr.push(obj1);
-    arr.push(obj2);
-    arr.push(obj3);
     res.send(arr);
 });
 
@@ -249,8 +279,8 @@ app.get("/my-date/:startdate/:enddate", (req, res) => {
     const obj1 = {
         asset_id: 1,
         time_stamp: "2017-03-01T12:50:00Z",
-        longitude: 77.2090,
-        latitude: 28.6139
+        longitude: 74.5815,
+        latitude: 16.8524
     }
     const obj2 = {
         asset_id: 1,
@@ -274,10 +304,10 @@ app.get("/my-date/:startdate/:enddate", (req, res) => {
 })
 
 
-app.post("/api/geofence", (req, res) => {
+app.post("/api/geofence", async (req, res) => {
     const asset_id = req.body.assetId;
-    console.log(asset_id);
     const coordinates = req.body.name;
+    // console.log("Coordinates= ",coordinates);
     let arr1 = [];
     const obj1 = {
         asset_id: asset_id,
@@ -285,23 +315,27 @@ app.post("/api/geofence", (req, res) => {
     }
     geofence.insertMany(obj1);
 
-    assets.find({asset_id: asset_id}, (err, ans) => {
-        arr1 = [ans[0].longitude, ans[0].latitude];
-    })
-
+   const response=await assets.find({asset_id: asset_id});
+  if(response.length!==0)
+  {
+      arr1=[response[0].longitude,response[0].latitude];
+  }
     const boolflag = (pointInPolygon(arr1, coordinates));
     res.send(boolflag);
 })
 
-app.post("/api/georoute", (req, res) => {
+app.post("/api/georoute", async(req, res) => {
     let arr1 = [];
     const coordinates = (req.body.name);
     const asset_id = (req.body.assetId);
     const negativecoordinates = Array.from(coordinates);
     const positivecoordinates = Array.from(coordinates);
-    assets.find({asset_id: asset_id}, (err, ans) => {
-        arr1 = [ans[0].longitude, ans[1].latitude]
-    })
+
+    const response=await assets.find({asset_id: asset_id});
+    if(response.length!==0)
+    {
+      arr1=[response[0].longitude,response[0].latitude];
+    }
     var i;
     for (i = 0; i < coordinates.length; i++) {
         const temp = coordinates[i];
